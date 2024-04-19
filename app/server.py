@@ -46,7 +46,7 @@ def ocr():
         thresh, im_bw = cv2.threshold(
             gray_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
         no_noise = noise_removal(im_bw)
-        ocr_result = pytesseract.image_to_string(no_noise, lang='eng')
+        ocr_result = pytesseract.image_to_string(no_noise, lang='en')
 
         return jsonify({'text': ocr_result})
 
@@ -79,11 +79,11 @@ def ans():
     question = data.get('question', None)
     context = data.get('context', None)
     res = nlp({'question': question, 'context': context})
-    print(res)
     if res['score'] < 0.5: 
-        return 'The question cannot be confidently answered.'
+        return jsonify({"answer": 'The question cannot be confidently answered.'})
     else:
-        return res['answer']
+        return jsonify({"answer": res['answer']})
+
 
 
 if __name__ == '__main__':
